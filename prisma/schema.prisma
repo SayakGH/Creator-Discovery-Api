@@ -1,0 +1,41 @@
+generator client {
+  provider        = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Creator {
+  id              String      @id @default(uuid())
+  name            String
+  platform        String
+  niche           String
+  bio             String
+  followerCount   Int
+  engagementRate  Float
+  audienceCountry String
+  sampleContent   String?
+  createdAt       DateTime    @default(now())
+  shortlists      Shortlist[]
+}
+
+model Brand {
+  id         String      @id @default(uuid())
+  email      String      @unique
+  password   String
+  createdAt  DateTime    @default(now())
+  shortlists Shortlist[]
+}
+
+model Shortlist {
+  id        String   @id @default(uuid())
+  brandId   String
+  creatorId String
+  createdAt DateTime @default(now())
+
+  brand   Brand   @relation(fields: [brandId], references: [id])
+  creator Creator @relation(fields: [creatorId], references: [id])
+
+  @@unique([brandId, creatorId])
+}
