@@ -73,16 +73,51 @@ The application will run on `http://localhost:3000/api`.
 
 | Category | Endpoint | HTTP Method | Auth Required | Description |
 |---|---|---|---|---|
+| **Auth** | `/auth/register` | `POST` | No | Register brand account |
 | **Auth** | `/auth/login` | `POST` | No | Authenticate brand and receive JWT token |
 | **Creators** | `/creators` | `GET` | No | Search, filter, and paginate creators |
 | **Creators** | `/creators/:id` | `GET` | No | Fetch a single creator by ID |
 | **Shortlist** | `/shortlist` | `POST` | **Yes (JWT)** | Add a creator to the brand's shortlist |
 | **Shortlist** | `/shortlist` | `GET` | **Yes (JWT)** | Retrieve all shortlisted creators |
 | **Shortlist** | `/shortlist/:creatorId` | `DELETE` | **Yes (JWT)** | Remove a creator from the shortlist |
+| **Docs** | `/docs` | `GET` | No | Interactive Swagger API documentation |
 
 ---
 
 ### Auth Module
+
+#### Register Brand (`POST /auth/register`)
+Creates a new brand account.
+
+* **Request Body:**
+  ```json
+  {
+    "email": "newbrand@example.com",
+    "password": "securepassword123"
+  }
+  ```
+* **Example cURL Request:**
+  ```bash
+  curl -X POST http://localhost:3000/api/auth/register \
+    -H "Content-Type: application/json" \
+    -d '{"email": "newbrand@example.com", "password": "securepassword123"}'
+  ```
+* **Response `201 Created`:**
+  ```json
+  {
+    "id": "e4a9e1b8-7244-47be-0b88-b49c8f3877d7",
+    "email": "newbrand@example.com",
+    "createdAt": "2026-06-12T11:22:31.000Z"
+  }
+  ```
+* **Response `409 Conflict`:** (Email already registered)
+  ```json
+  {
+    "statusCode": 409,
+    "message": "Email already registered",
+    "error": "Conflict"
+  }
+  ```
 
 #### Authenticate / Login (`POST /auth/login`)
 Validates brand credentials and returns a JWT token.

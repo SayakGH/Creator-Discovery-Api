@@ -8,10 +8,12 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AddToShortlistDto } from './dto/add-to-shortlist.dto';
 import { ShortlistService } from './shortlist.service';
 
+@ApiBearerAuth()
 @Controller('shortlist')
 @UseGuards(JwtAuthGuard)
 export class ShortlistController {
